@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://cqwks2r66tnvf"]
+
+[ext_resource type="Script" path="res://bullet.gd" id="1_8g1p8"]
+[ext_resource type="Texture2D" uid="uid://0ox853jrybv7" path="res://Retina/towerDefense_tile251.png" id="1_r7oa4"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_feu3i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_r7oa4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cky5j"]
+radius = 11.0
+height = 70.0
+
+[node name="bullet" type="CharacterBody2D"]
+script = ExtResource("1_8g1p8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+rotation = 1.5708
+sprite_frames = SubResource("SpriteFrames_feu3i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visibility_layer = 0
+position = Vector2(0, 1)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_cky5j")

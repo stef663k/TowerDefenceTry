@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://jjbuggoa33kg"]
+
+[ext_resource type="Script" path="res://test.gd" id="1_5o38c"]
+[ext_resource type="Texture2D" uid="uid://dttdxcam4qbig" path="res://icon.svg" id="1_kci33"]
+[ext_resource type="PackedScene" uid="uid://cb4jfsatlpror" path="res://player.tscn" id="2_7cncr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_25q18"]
+size = Vector2(272, 21)
+
+[node name="Node2D" type="Node2D"]
+position = Vector2(18, 19)
+script = ExtResource("1_5o38c")
+
+[node name="Player" parent="." instance=ExtResource("2_7cncr")]
+position = Vector2(220, 278)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
+position = Vector2(306.5, 277.5)
+scale = Vector2(2.10156, 0.132813)
+texture = ExtResource("1_kci33")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(309, 276.5)
+shape = SubResource("RectangleShape2D_25q18")
+
+[connection signal="shooting" from="Player" to="." method="_on_player_shooting"]
