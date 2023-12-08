@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://jjbuggoa33kg"]
+[gd_scene load_steps=6 format=3 uid="uid://jjbuggoa33kg"]
 
 [ext_resource type="Script" path="res://test.gd" id="1_5o38c"]
 [ext_resource type="Texture2D" uid="uid://dttdxcam4qbig" path="res://icon.svg" id="1_kci33"]
 [ext_resource type="PackedScene" uid="uid://cb4jfsatlpror" path="res://player.tscn" id="2_7cncr"]
+[ext_resource type="Script" path="res://MultiplayerSynchronizer.gd" id="4_xtwlw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_25q18"]
 size = Vector2(272, 21)
@@ -25,4 +26,8 @@ texture = ExtResource("1_kci33")
 position = Vector2(309, 276.5)
 shape = SubResource("RectangleShape2D_25q18")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+script = ExtResource("4_xtwlw")
+
 [connection signal="shooting" from="Player" to="." method="_on_player_shooting"]
+[connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_ready"]
