@@ -10,3 +10,5 @@ func spawn_player(position, unique_id):
 	player.set_multiplayer_authority(unique_id)
 	return player
    
+func _on_shooting(pos, angle):
+	rpc("shoot", pos, angle)

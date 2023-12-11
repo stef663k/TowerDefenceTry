@@ -31,3 +31,8 @@ shape = SubResource("RectangleShape2D_5slwv")
 position = Vector2(1, 0)
 scale = Vector2(1, 0.953125)
 sprite_frames = SubResource("SpriteFrames_cwmfg")
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="shooting" from="." to="." method="_on_shooting"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
