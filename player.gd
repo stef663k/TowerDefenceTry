@@ -8,7 +8,6 @@ const SPEED = 300.0
 
 
 func _physics_process(delta):
-	# Add the gravity.
 	if Input.is_action_just_pressed("ui_accept"):
 		shooting.emit($bulletPoint.global_position, rotation)
 	
