@@ -66,7 +66,7 @@ func add_player():
 
 @rpc("unreliable")
 func server_shoot_request(pos, angle):
-	if is_network_authority():
+	# if is_network_authority():
 		var b = bullet.instantiate()
 		b.global_position = pos
 		b.rotation = angle
