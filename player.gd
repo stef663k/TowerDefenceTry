@@ -31,17 +31,5 @@ func _input(event):
 			can_shoot = false
 			shooting.emit($bulletPoint.global_position, rotation)
 			$Timer.start()
-
-
-# In the Player script
-func _on_shooting(pos, angle):
-	if is_multiplayer_authority():
-		var b = bullet.instantiate()
-		b.global_position = pos
-		b.rotation = angle
-		add_child(b)
-
-
-
 func _on_timer_timeout():
 	can_shoot = true

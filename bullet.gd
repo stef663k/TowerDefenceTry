@@ -12,6 +12,6 @@ func _process(delta):
 	# if not is_on_floor():
 	# 	velocity.y += gravity * delta
 	velocity = Vector2.from_angle(rotation)*SPEED# * SPEED * delta
-	print(velocity)
+	# print(velocity)
 	
 	move_and_slide()

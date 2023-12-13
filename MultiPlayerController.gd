@@ -3,7 +3,7 @@ extends Control
 
 @export var ip_address = "127.0.0.1"
 @export var port = 6942
-@export var player_scene = preload("res://test.tscn")
+@export var player_scene = preload("res://main.tscn")
 var peer
 
 var bullet = preload("res://bullet.tscn")
@@ -13,6 +13,10 @@ func _ready():
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 	multiplayer.connected_to_server.connect(connected_to_server)
 	multiplayer.connection_failed.connect(connection_failed)
+	if is_multiplayer_authority():
+		print("Server started")
+	else:
+		print("Client started")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -29,6 +33,12 @@ func peer_disconnected(id):
 
 @rpc("any_peer", "call_local")
 func _peer_disconnected(id):
+
+	if is_multiplayer_authority():
+		print("Player joined")
+	else:
+		print("Player joined on a client")
+
 	var player = get_node("Player" + str(id))
 	player.queue_free()
 
@@ -49,6 +59,10 @@ func _on_host_button_down():
 	$Join.hide()
 	$Host.hide()
 	print("Hosting on port " + str(port))
+	if is_multiplayer_authority():
+		print("Server started")
+	else:
+		print("Client started")
 
 			
 func _on_join_button_down():
@@ -59,6 +73,7 @@ func _on_join_button_down():
 	$Host.hide()
 	print("Joining " + ip_address + ":" + str(port))
 
+
 func add_player():
 	var player = player_scene.instantiate()
 	player.set_name("Player" + str(peer.get_unique_id()))
@@ -66,8 +81,11 @@ func add_player():
 
 @rpc("unreliable")
 func server_shoot_request(pos, angle):
-	# if is_network_authority():
+	if is_multiplayer_authority():
+		print("Server received shoot request")
 		var b = bullet.instantiate()
 		b.global_position = pos
 		b.rotation = angle
 		add_child(b)
+	else:
+		print("Client received shoot request")
