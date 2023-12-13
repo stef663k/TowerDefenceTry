@@ -17,6 +17,11 @@ func _ready():
 		print("Server started")
 	else:
 		print("Client started")
+	
+	var join_button = $Join
+	join_button.modulate = Color(1, 0, 0)
+	var host_button = $Host
+	host_button.modulate = Color(1, 0, 0)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):

@@ -17,5 +17,8 @@ offset = Vector2(306.5, 0)
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 script = ExtResource("3_deju0")
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../Player")
+
 [connection signal="shooting" from="Player" to="." method="_on_player_shooting"]
 [connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_ready"]

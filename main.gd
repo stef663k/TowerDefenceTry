@@ -1,9 +1,14 @@
 extends Node2D
 var bullet = preload("res://bullet.tscn")
 var multiplayerSynchronizer
+var multiplayer_spawner : MultiplayerSpawner 
+
 
 func _ready():
 	multiplayerSynchronizer = get_node("MultiplayerSynchronizer")
+	multiplayer_spawner = $MultiplayerSpawner
+
+
 
 func _process(_delta):
 	pass
