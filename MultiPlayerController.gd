@@ -1,9 +1,33 @@
 extends Control
 
+var player_scene: PackedScene = load("res://main.tscn")
+signal player_host
+signal player_join
+signal player_joins
+signal player_start
+@onready var join_button = $VBoxContainer/Join
+@onready var host_button = $VBoxContainer/Host
+@onready var start_game_button = $VBoxContainer/StartGame
+	
+func _on_host_button_down():
+	join_button.hide()
+	host_button.hide()
+	player_host.emit()
 
-@export var ip_address = "127.0.0.1"
-@export var port = 6942
-@export var player_scene = preload("res://main.tscn")
+func _on_join_button_down():
+	join_button.hide()
+	host_button.hide()
+	player_join.emit()
+
+@rpc()
+func startGame():
+	print("Starting game")
+	if player_scene == null:
+		printerr("Player scene not found")
+		return
+
+
+	print("game exited")
 var peer
 
 var bullet = preload("res://bullet.tscn")
@@ -18,9 +42,8 @@ func _ready():
 	else:
 		print("Client started")
 	
-	var join_button = $Join
+	
 	join_button.modulate = Color(1, 0, 0)
-	var host_button = $Host
 	host_button.modulate = Color(1, 0, 0)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -28,61 +51,35 @@ func _process(_delta):
 	pass
 func peer_connected(id):
 	print("Player joined: " + str(id))
-	add_player()
+	
 
 @rpc("any_peer", "call_local")
 func peer_disconnected(id):
 	multiplayer.peer_disconnected.disconnect(peer_disconnected)
-	del_peer(id)
-	print("Player left: " + str(id))
+	if not self.is_queued_for_deletion():  # Check if the node is still valid
+		del_peer(id)
+		print("Player left: " + str(id))
 
 @rpc("any_peer", "call_local")
 func _peer_disconnected(id):
-
 	if is_multiplayer_authority():
 		print("Player joined")
 	else:
 		print("Player joined on a client")
 
 	var player = get_node("Player" + str(id))
-	player.queue_free()
+	if player != null:
+		player.queue_free()
+
 
 func del_peer(id):
-	rpc("_peer-disconnected", id)
+	rpc("_peer_disconnected", id)
 
 func connected_to_server():
 	print("Connected to server")
 
 func connection_failed():
 	print("Connection failed")
-	
-func _on_host_button_down():
-	peer = ENetMultiplayerPeer.new()
-	peer.create_server(port, 2)
-	multiplayer.multiplayer_peer = peer
-	add_player()
-	$Join.hide()
-	$Host.hide()
-	print("Hosting on port " + str(port))
-	if is_multiplayer_authority():
-		print("Server started")
-	else:
-		print("Client started")
-
-			
-func _on_join_button_down():
-	peer = ENetMultiplayerPeer.new()
-	peer.create_client(ip_address, port)
-	multiplayer.multiplayer_peer = peer
-	$Join.hide()
-	$Host.hide()
-	print("Joining " + ip_address + ":" + str(port))
-
-
-func add_player():
-	var player = player_scene.instantiate()
-	player.set_name("Player" + str(peer.get_unique_id()))
-	call_deferred("add_child", player)
 
 @rpc("unreliable")
 func server_shoot_request(pos, angle):
@@ -94,3 +91,11 @@ func server_shoot_request(pos, angle):
 		add_child(b)
 	else:
 		print("Client received shoot request")
+
+
+func _on_start_game_button_down():
+	if is_multiplayer_authority():
+		start_game_button.hide()
+		player_start.emit()
+
+		

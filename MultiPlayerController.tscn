@@ -6,45 +6,55 @@
 
 [node name="MultiplayerScene" type="Control"]
 layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_ndtl3")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://player.tscn")
+spawn_path = NodePath("..")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_ndtl3")
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-
-[node name="Join" type="Button" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -98.0
-offset_top = 19.0
-offset_right = 102.0
-offset_bottom = 119.0
+offset_left = -143.5
+offset_top = -183.0
+offset_right = 143.5
+offset_bottom = 183.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Join" type="Button" parent="VBoxContainer"]
+layout_mode = 2
 text = "Join"
 
-[node name="Host" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -98.0
-offset_top = -138.0
-offset_right = 102.0
-offset_bottom = -38.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Host" type="Button" parent="VBoxContainer"]
+layout_mode = 2
 theme = SubResource("Theme_16nnq")
 text = "Host"
 
-[connection signal="button_down" from="Join" to="." method="_on_join_button_down"]
-[connection signal="button_down" from="Host" to="." method="_on_host_button_down"]
+[node name="StartGame" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Start Game"
+
+[connection signal="button_down" from="VBoxContainer/Join" to="." method="_on_join_button_down"]
+[connection signal="button_down" from="VBoxContainer/Host" to="." method="_on_host_button_down"]
+[connection signal="button_down" from="VBoxContainer/StartGame" to="." method="_on_start_game_button_down"]

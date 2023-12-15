@@ -1,24 +1,50 @@
 [gd_scene load_steps=4 format=3 uid="uid://dxo5g1n6ppovk"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_4wg35"]
-[ext_resource type="PackedScene" uid="uid://cb4jfsatlpror" path="res://player.tscn" id="2_t7ht6"]
-[ext_resource type="Script" path="res://MultiplayerSynchronizer.gd" id="3_deju0"]
+[ext_resource type="PackedScene" uid="uid://c7u6ce64mkw23" path="res://MultiPlayerController.tscn" id="3_wenqu"]
+
+[sub_resource type="Curve2D" id="Curve2D_uas46"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 6, -2, 0, 0, 0, 0, 1154, -2)
+}
+point_count = 2
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_4wg35")
 
-[node name="Player" parent="." instance=ExtResource("2_t7ht6")]
-position = Vector2(252, 354)
+[node name="MultiplayerScene" parent="." instance=ExtResource("3_wenqu")]
+offset_left = 559.0
+offset_top = 458.0
+offset_right = 559.0
+offset_bottom = 458.0
+metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(27, 99)
+position = Vector2(271, 324)
 offset = Vector2(306.5, 0)
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-script = ExtResource("3_deju0")
+[node name="MobPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_uas46")
+
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
+position = Vector2(6, -2)
+
+[node name="MobTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(561, 587)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("../Player")
+_spawnable_scenes = PackedStringArray("res://player.tscn")
+spawn_path = NodePath("..")
 
-[connection signal="shooting" from="Player" to="." method="_on_player_shooting"]
-[connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_ready"]
+[connection signal="player_host" from="MultiplayerScene" to="." method="_on_host_button_down"]
+[connection signal="player_join" from="MultiplayerScene" to="." method="_on_join_button_down"]
+[connection signal="player_start" from="MultiplayerScene" to="." method="_on_multiplayer_scene_player_start"]
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]

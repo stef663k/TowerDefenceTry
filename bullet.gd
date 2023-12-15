@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-
+signal hit
 const SPEED = 300.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -15,3 +15,7 @@ func _process(_delta):
 	# print(velocity)
 	
 	move_and_slide()
+func _on_body_entered(body):
+	if body.is_in_group("enemy"):
+		emit_signal("hit")
+		queue_free()

@@ -1,5 +1,6 @@
-extends CharacterBody2D
+extends RigidBody2D
 signal shooting
+signal hit
 
 const SPEED = 300.0
 
@@ -10,6 +11,12 @@ var can_shoot = true
 # var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
+	
+	if is_multiplayer_authority():
+		position = Vector2(306.5, 277.5)
+	else:
+		position = Vector2(386.5, 277.5) + Vector2(100, 0)
+	#get_tree().get_root().get_node("main").startGame()
 
 func _physics_process(_delta):
 	if has_node("bulletPoint"):
@@ -33,3 +40,15 @@ func _input(event):
 			$Timer.start()
 func _on_timer_timeout():
 	can_shoot = true
+
+func start(pos):
+	position = pos
+	show()
+	$CollisionShape2D.disabled = false
+
+func _on_body_entered(body):
+	body.queue_free()
+	hit.emit()
+	$CollisionShape2D.disabled = true
+
+

@@ -31,13 +31,15 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 3.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w13re"]
 size = Vector2(144, 178)
 
-[node name="Mob" type="CharacterBody2D"]
+[node name="Mob" type="RigidBody2D" groups=["mobs"]]
+collision_mask = 0
+gravity_scale = 0.0
 script = ExtResource("1_toonx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -46,4 +48,7 @@ frame_progress = 0.0310575
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 1)
+scale = Vector2(0.75, 0.75)
 shape = SubResource("RectangleShape2D_w13re")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
